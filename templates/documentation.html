@@ -1,0 +1,144 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<h1 class="mb-4">Documentation</h1>
+
+<div class="row">
+    <div class="col-md-3 mb-4">
+        <div class="list-group">
+            <a href="#overview" class="list-group-item list-group-item-action">Overview</a>
+            <a href="#installation" class="list-group-item list-group-item-action">Installation</a>
+            <a href="#usage" class="list-group-item list-group-item-action">Usage</a>
+            <a href="#features" class="list-group-item list-group-item-action">Features</a>
+            <a href="#technical" class="list-group-item list-group-item-action">Technical Details</a>
+            <a href="#ethical" class="list-group-item list-group-item-action">Ethical Considerations</a>
+        </div>
+    </div>
+    <div class="col-md-9">
+        <section id="overview">
+            <h2>Overview</h2>
+            <p>The Educational Keylogger Demonstration is a Python-based tool designed to showcase how keyloggers function. It is specifically created for educational purposes to help security professionals, students, and educators understand the mechanics behind keyboard monitoring software.</p>
+            <p>This tool demonstrates:</p>
+            <ul>
+                <li>Basic keyboard input capture</li>
+                <li>System information collection</li>
+                <li>Log file creation and management</li>
+                <li>USB deployment mechanisms</li>
+            </ul>
+        </section>
+        
+        <section id="installation" class="mt-4">
+            <h2>Installation</h2>
+            <p>To use this educational demonstration, you'll need:</p>
+            <ul>
+                <li>Python 3.6 or higher</li>
+                <li>Windows operating system</li>
+                <li>pynput library</li>
+            </ul>
+            
+            <div class="code-block">
+                <pre>
+# Clone the repository
+git clone https://github.com/yourusername/educational-keylogger.git
+
+# Navigate to the project directory
+cd educational-keylogger
+
+# Install dependencies
+pip install -r requirements.txt</pre>
+            </div>
+            
+            <p>For USB deployment demonstration:</p>
+            <ul>
+                <li>Format a USB drive (for demonstration purposes)</li>
+                <li>Run the USB package creator function</li>
+                <li>Copy the generated files to the USB drive</li>
+            </ul>
+        </section>
+        
+        <section id="usage" class="mt-4">
+            <h2>Usage</h2>
+            <p>This tool is designed for educational purposes only and should be used in a controlled environment with proper authorization.</p>
+            
+            <h4>Basic Usage:</h4>
+            <div class="code-block">
+                <pre>
+# Import the module
+from keylogger import EducationalKeylogger
+
+# Create an instance
+keylogger = EducationalKeylogger(log_dir="logs", collect_system_info=True)
+
+# Start monitoring (for educational demonstration)
+keylogger.start()</pre>
+            </div>
+            
+            <h4>Creating USB Demonstration Package:</h4>
+            <div class="code-block">
+                <pre>
+# Import the function
+from keylogger import create_usb_package
+
+# Create the package
+create_usb_package(output_dir="usb_demo")</pre>
+            </div>
+            
+            <p>Always ensure you have proper authorization before running this demonstration.</p>
+        </section>
+        
+        <section id="features" class="mt-4">
+            <h2>Features</h2>
+            <ul>
+                <li><strong>Keyboard Monitoring</strong>: Captures keyboard inputs and logs them to a file.</li>
+                <li><strong>System Information Collection</strong>: Gathers basic system information for educational purposes.</li>
+                <li><strong>Log Management</strong>: Creates organized log files with timestamps.</li>
+                <li><strong>USB Deployment</strong>: Demonstrates how keyloggers can be deployed via USB drives.</li>
+                <li><strong>Educational Safeguards</strong>: Includes multiple consent requirements and disclaimers.</li>
+            </ul>
+        </section>
+        
+        <section id="technical" class="mt-4">
+            <h2>Technical Details</h2>
+            <p>The Educational Keylogger Demonstration uses the following technical approaches:</p>
+            
+            <h4>Keyboard Monitoring:</h4>
+            <p>The tool uses the pynput library to register keyboard event listeners. When a key is pressed, the on_press callback function is triggered, which processes and logs the keystroke.</p>
+            
+            <h4>System Information Collection:</h4>
+            <p>Basic system information is collected using Python's standard libraries (platform, socket, os) to demonstrate how keyloggers might gather contextual information.</p>
+            
+            <h4>Log File Management:</h4>
+            <p>Logs are stored in a designated directory with filenames based on dates and times. This demonstrates how captured data might be organized.</p>
+            
+            <h4>USB Deployment:</h4>
+            <p>The USB deployment function creates the necessary files for running the demonstration from a USB drive, showing how malicious software might be distributed.</p>
+        </section>
+        
+        <section id="ethical" class="mt-4">
+            <h2>Ethical Considerations</h2>
+            <p>Using keyloggers without explicit consent is illegal and unethical. This educational demonstration is provided to increase awareness and understanding of these tools for defensive purposes only.</p>
+            
+            <p>Ethical guidelines when using this demonstration:</p>
+            <ul>
+                <li>Only use on systems you own or have explicit permission to test</li>
+                <li>Inform all users that their keystrokes will be monitored during the demonstration</li>
+                <li>Do not use any captured data for any purpose other than education</li>
+                <li>Delete all logs after the educational demonstration is complete</li>
+                <li>Never deploy on public or shared computers without authorization</li>
+            </ul>
+            
+            <div class="alert alert-danger mt-3">
+                <h4>Legal Warning</h4>
+                <p>Unauthorized use of keyloggers may violate various laws, including:</p>
+                <ul>
+                    <li>Computer Fraud and Abuse Act</li>
+                    <li>Electronic Communications Privacy Act</li>
+                    <li>State and national privacy laws</li>
+                    <li>Workplace privacy regulations</li>
+                </ul>
+                <p>The author of this educational tool assumes no liability for misuse.</p>
+            </div>
+        </section>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,145 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<h1 class="mb-4">Keylogger Detection Methods</h1>
+
+<div class="row">
+    <div class="col-lg-8">
+        <p class="lead">Understanding how to detect keyloggers is crucial for cybersecurity professionals and individuals concerned about privacy. This page outlines various methods to identify the presence of keyloggers on a system.</p>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-6 mb-4">
+        <div class="card h-100">
+            <div class="card-header">
+                <h3>System-Level Detection</h3>
+            </div>
+            <div class="card-body">
+                <h4>Process Monitoring</h4>
+                <p>Check for suspicious processes in Task Manager (Windows) or Activity Monitor (macOS):</p>
+                <ul>
+                    <li>Look for unfamiliar processes consuming CPU resources</li>
+                    <li>Monitor processes with keyboard access permissions</li>
+                    <li>Check for processes that start automatically with the system</li>
+                </ul>
+                
+                <h4>Startup Programs</h4>
+                <p>Examine programs that launch at system startup:</p>
+                <ul>
+                    <li>Windows: Use Task Manager > Startup tab</li>
+                    <li>macOS: System Preferences > Users & Groups > Login Items</li>
+                    <li>Look for unfamiliar or suspicious entries</li>
+                </ul>
+                
+                <h4>Resource Monitoring</h4>
+                <p>Monitor unusual network or disk activity:</p>
+                <ul>
+                    <li>Unexpected network transmissions when typing</li>
+                    <li>Regular file writes to hidden or unusual locations</li>
+                    <li>Unexplained increases in CPU or memory usage while typing</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6 mb-4">
+        <div class="card h-100">
+            <div class="card-header">
+                <h3>Software-Based Detection</h3>
+            </div>
+            <div class="card-body">
+                <h4>Anti-Malware Scans</h4>
+                <p>Use specialized security software:</p>
+                <ul>
+                    <li>Run full system scans with updated anti-malware software</li>
+                    <li>Use multiple scanning engines for comprehensive detection</li>
+                    <li>Perform regular scans, especially after connecting new devices</li>
+                </ul>
+                
+                <h4>API Monitoring</h4>
+                <p>Detect keyboard hooking through API monitoring:</p>
+                <ul>
+                    <li>Use tools that monitor keyboard hook installations</li>
+                    <li>Check for applications intercepting keyboard messages</li>
+                    <li>Monitor Windows messaging system for abnormal behavior</li>
+                </ul>
+                
+                <h4>File System Monitoring</h4>
+                <p>Check for suspicious files and activity:</p>
+                <ul>
+                    <li>Look for hidden files with recent modification timestamps</li>
+                    <li>Monitor write operations to unusual locations</li>
+                    <li>Check for log files with keyboard data patterns</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-6 mb-4">
+        <div class="card h-100">
+            <div class="card-header">
+                <h3>Hardware Keylogger Detection</h3>
+            </div>
+            <div class="card-body">
+                <h4>Physical Inspection</h4>
+                <p>Regularly inspect hardware connections:</p>
+                <ul>
+                    <li>Check USB ports and connections for unfamiliar devices</li>
+                    <li>Inspect keyboard cables for additional hardware components</li>
+                    <li>Look for unusual additions to internal hardware (requires technical knowledge)</li>
+                </ul>
+                
+                <h4>Hardware Analysis</h4>
+                <p>Advanced methods for hardware detection:</p>
+                <ul>
+                    <li>Use USB device analyzers to identify suspicious hardware</li>
+                    <li>Monitor for unexpected power consumption from USB devices</li>
+                    <li>Check device firmware for modifications</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6 mb-4">
+        <div class="card h-100">
+            <div class="card-header">
+                <h3>Preventive Measures</h3>
+            </div>
+            <div class="card-body">
+                <h4>Regular Security Practices</h4>
+                <p>Implement good security habits:</p>
+                <ul>
+                    <li>Keep operating systems and applications updated</li>
+                    <li>Use strong access controls and user permissions</li>
+                    <li>Implement application whitelisting where possible</li>
+                    <li>Avoid running software from untrusted sources</li>
+                </ul>
+                
+                <h4>Alternative Input Methods</h4>
+                <p>For sensitive information:</p>
+                <ul>
+                    <li>Use on-screen keyboards for entering passwords</li>
+                    <li>Consider password managers with auto-fill capabilities</li>
+                    <li>Use multi-factor authentication to reduce password reliance</li>
+                </ul>
+                
+                <h4>Regular Auditing</h4>
+                <p>Implement systematic checking:</p>
+                <ul>
+                    <li>Perform regular security audits of systems</li>
+                    <li>Review installed software and hardware regularly</li>
+                    <li>Monitor for changes in system performance or behavior</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="alert alert-info mt-4">
+    <h4>Educational Note</h4>
+    <p>Understanding these detection methods helps security professionals identify potential threats and develop more robust security practices. By studying how keyloggers can be detected, we gain insights into their operational mechanisms and limitations.</p>
+</div>
+{% endblock %}

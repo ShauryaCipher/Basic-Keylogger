@@ -1,0 +1,18 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="text-center mt-5">
+    <h1 class="text-danger">Error</h1>
+    <p class="lead">An unexpected error has occurred.</p>
+    
+    {% if error %}
+    <div class="alert alert-danger mt-4 w-75 mx-auto">
+        <p>{{ error }}</p>
+    </div>
+    {% endif %}
+    
+    <div class="mt-5">
+        <a href="/" class="btn btn-primary">Return to Home</a>
+    </div>
+</div>
+{% endblock %}

