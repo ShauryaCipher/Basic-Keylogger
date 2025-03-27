@@ -46,8 +46,8 @@ This demonstration helps to understand:
 
 1. Clone this repository:
    ```
-   git clone https://github.com/yourusername/educational-keylogger.git
-   cd educational-keylogger
+   git clone https://github.com/ShauryaCipher/Basic-Keylogger.git
+   cd Basic-Keylogger
    ```
 
 2. Install the required libraries:
